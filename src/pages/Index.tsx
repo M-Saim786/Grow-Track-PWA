@@ -18,14 +18,6 @@ const Index = () => {
     saveHabits(habits);
   }, [habits]);
 
-  // Register service worker
-  useEffect(() => {
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('/sw.js')
-        .then(() => console.log('Service Worker registered'))
-        .catch((error) => console.log('Service Worker registration failed:', error));
-    }
-  }, []);
 
   const addHabit = (name: string) => {
     const newHabit: Habit = {
