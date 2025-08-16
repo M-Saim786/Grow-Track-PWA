@@ -33,23 +33,6 @@ const Index = () => {
     });
   };
 
-  const deleteHabit = (habitId: string) => {
-    setHabits(prevHabits => {
-      const habitToDelete = prevHabits.find(h => h.id === habitId);
-      const filtered = prevHabits.filter(h => h.id !== habitId);
-      
-      if (habitToDelete) {
-        toast({
-          title: "Habit deleted",
-          description: `"${habitToDelete.name}" has been removed.`,
-          variant: "destructive"
-        });
-      }
-      
-      return filtered;
-    });
-  };
-
   const toggleHabit = (habitId: string) => {
     const today = getTodayString();
     setHabits(prevHabits => 
@@ -84,8 +67,6 @@ const Index = () => {
   };
 
   const completedToday = habits.filter(habit => isCompletedToday(habit)).length;
-  const incompleteHabits = habits.filter(habit => !isCompletedToday(habit));
-  const completedHabits = habits.filter(habit => isCompletedToday(habit));
 
   return (
     <div className="min-h-screen bg-background">
@@ -104,42 +85,15 @@ const Index = () => {
               <p className="text-muted-foreground">Add your first habit above and begin tracking your progress!</p>
             </div>
           ) : (
-            <>
-              {/* Incomplete Habits */}
-              {incompleteHabits.length > 0 && (
-                <div className="space-y-3">
-                  <h3 className="text-lg font-semibold text-foreground">Today's Habits</h3>
-                  {incompleteHabits.map(habit => (
-                    <HabitCard
-                      key={habit.id}
-                      habit={habit}
-                      onToggle={toggleHabit}
-                      onDelete={deleteHabit}
-                    />
-                  ))}
-                </div>
-              )}
-
-              {/* Completed Habits */}
-              {completedHabits.length > 0 && (
-                <div className="space-y-3 mt-8">
-                  <h3 className="text-lg font-semibold text-foreground flex items-center gap-2">
-                    <span className="text-success">✓</span>
-                    Completed Today ({completedHabits.length})
-                  </h3>
-                  <div className="space-y-3">
-                    {completedHabits.map(habit => (
-                      <HabitCard
-                        key={habit.id}
-                        habit={habit}
-                        onToggle={toggleHabit}
-                        onDelete={deleteHabit}
-                      />
-                    ))}
-                  </div>
-                </div>
-              )}
-            </>
+            <div className="space-y-3">
+              {habits.map(habit => (
+                <HabitCard
+                  key={habit.id}
+                  habit={habit}
+                  onToggle={toggleHabit}
+                />
+              ))}
+            </div>
           )}
         </div>
       </div>
