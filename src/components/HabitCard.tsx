@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Check, Flame } from 'lucide-react';
+import { Check, Flame, Trash2 } from 'lucide-react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -9,9 +9,10 @@ import { Habit, isCompletedToday, getCurrentStreak } from '@/utils/localStorage'
 interface HabitCardProps {
   habit: Habit;
   onToggle: (habitId: string) => void;
+  onDelete: (habitId: string) => void;
 }
 
-export const HabitCard = ({ habit, onToggle }: HabitCardProps) => {
+export const HabitCard = ({ habit, onToggle, onDelete }: HabitCardProps) => {
   const [isAnimating, setIsAnimating] = useState(false);
   const isCompleted = isCompletedToday(habit);
   const streak = getCurrentStreak(habit);
@@ -69,12 +70,28 @@ export const HabitCard = ({ habit, onToggle }: HabitCardProps) => {
           </div>
         </div>
 
-        <Badge variant={isCompleted ? "secondary" : "outline"} className={cn(
-          "transition-all duration-300",
-          isCompleted && "bg-white/20 text-white border-white/30"
-        )}>
-          {isCompleted ? 'Done' : 'Pending'}
-        </Badge>
+        <div className="flex items-center gap-2">
+          <Button
+            variant="ghost"
+            size="sm"
+            className={cn(
+              "w-8 h-8 p-0 text-destructive hover:text-destructive hover:bg-destructive/10",
+              isCompleted && "text-white/70 hover:text-white hover:bg-white/10"
+            )}
+            onClick={(e) => {
+              e.stopPropagation();
+              onDelete(habit.id);
+            }}
+          >
+            <Trash2 className="w-4 h-4" />
+          </Button>
+          <Badge variant={isCompleted ? "secondary" : "outline"} className={cn(
+            "transition-all duration-300",
+            isCompleted && "bg-white/20 text-white border-white/30"
+          )}>
+            {isCompleted ? 'Done' : 'Pending'}
+          </Badge>
+        </div>
       </div>
     </Card>
   );
